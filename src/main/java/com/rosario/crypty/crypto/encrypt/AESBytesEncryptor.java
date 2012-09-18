@@ -1,9 +1,11 @@
 package com.rosario.crypty.crypto.encrypt;
 
 import static com.rosario.crypty.crypto.encrypt.CipherUtils.newCipher;
+import static com.rosario.crypty.crypto.encrypt.CipherUtils.newSecretKey;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 import com.rosario.crypty.crypto.keygen.BytesKeyGenerator;
 
@@ -19,8 +21,13 @@ public class AESBytesEncryptor implements BytesEncryptor {
 	
 	private static final String AES_ALGORITHM = "AES/CBC/PKCS5Padding";
 	
+	private static final String ALGORITHM = "AES";
+	
+	private static final int KEYSIZE = 128;
+	
 	public AESBytesEncryptor(BytesKeyGenerator ivGenerator) {
-		this.secretKey = null; //TODO
+		SecretKey secretKey = newSecretKey(ALGORITHM, KEYSIZE);
+		this.secretKey = new SecretKeySpec(secretKey.getEncoded(), ALGORITHM);
 		
 		this.encryptor = newCipher(AES_ALGORITHM);
 		this.decryptor = newCipher(AES_ALGORITHM);

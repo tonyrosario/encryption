@@ -1,9 +1,13 @@
 package com.rosario.crypty.crypto.encrypt;
 
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
 
 /**
  * Static helper for working with Cipher API.
@@ -17,8 +21,22 @@ import javax.crypto.NoSuchPaddingException;
 public class CipherUtils {
 
 	/**
+	 * Generates a SecretKey
+	 */
+	public static SecretKey newSecretKey(String algorithm, int keySize) {
+		try {
+			KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithm);
+			keyGenerator.init(keySize);
+			return  keyGenerator.generateKey();
+		} catch (NoSuchAlgorithmException e) {
+			throw new IllegalArgumentException("Invalid encryption algorithm", e);
+		}
+		
+	}
+	
+	/**
 	 * Constructs a new Cipher.
-	 * @param algorithm - algorithm to use, i.e. "AES".
+	 * @param algorithm - algorithm to use, i.e. "AES/CBC/PKCS5Padding".
 	 */
 	public static Cipher newCipher(String algorithm) {
 		try {
