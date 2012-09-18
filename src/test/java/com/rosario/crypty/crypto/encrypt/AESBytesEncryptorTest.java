@@ -1,7 +1,6 @@
 package com.rosario.crypty.crypto.encrypt;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
