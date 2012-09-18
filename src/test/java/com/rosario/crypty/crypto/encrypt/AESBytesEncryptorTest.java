@@ -43,7 +43,21 @@ public class AESBytesEncryptorTest {
 	}
 	
 	@Test
-	public void decryptReturnsNull() {
-		assertNull(encryptor.decrypt(null));
+	public void decryptReturnsOriginalString() throws InvalidKeyException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException,
+			BadPaddingException, NoSuchAlgorithmException, InvalidKeySpecException {
+		String stringToEncrypt = "My super secret 1337 P@SSW0rDz";
+
+		byte[] encryptedString = encryptor.encrypt(stringToEncrypt.getBytes());
+
+		byte[] result = encryptor.decrypt(encryptedString);
+
+		//System.out.println("before: " + stringToEncrypt);
+		//System.out.println("after : " + new String(encryptedString));
+
+		String resultString = new String(result);
+		//System.out.println("unencrypted: " + resultString);
+
+		assertEquals(stringToEncrypt, resultString);
 	}
 }
