@@ -50,23 +50,6 @@ public class CipherUtils {
 			throw new IllegalStateException("Should not happen", e);
 		}
 	}
-
-	/**
-	 * Combine the individual byte arrays into one array.
-	 */
-	public static byte[] concatenate(byte[]... arrays) {
-		int length = 0;
-		for (byte[] array : arrays) {
-			length += array.length;
-		}
-		byte[] newArray = new byte[length];
-		int destPos = 0;
-		for (byte[] array : arrays) {
-			System.arraycopy(array, 0, newArray, destPos, array.length);
-			destPos += array.length;
-		}
-		return newArray;
-	}
 	
 	/**
 	 * Initializes the cipher for use.
