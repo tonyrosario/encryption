@@ -2,9 +2,10 @@ package com.rosario.crypty.crypto.encrypt;
 
 import static com.rosario.crypty.crypto.encrypt.CipherUtils.newCipher;
 import static com.rosario.crypty.crypto.encrypt.CipherUtils.newSecretKey;
-import static com.rosario.crypty.crypto.encrypt.CipherUtils.concatenate;
 import static com.rosario.crypty.crypto.encrypt.CipherUtils.initCipher;
 import static com.rosario.crypty.crypto.encrypt.CipherUtils.doFinal;
+import static com.rosario.crypty.crypto.util.EncodingUtils.concatenate;
+import static com.rosario.crypty.crypto.util.EncodingUtils.subArray;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -51,8 +52,17 @@ public class AESBytesEncryptor implements BytesEncryptor {
 	}
 
 	public byte[] decrypt(byte[] encryptedBytes) {
-		// TODO Auto-generated method stub
-		return null;
+		byte[] iv = extractIv(encryptedBytes);
+		initCipher(decryptor, Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(iv));
+		return doFinal(decryptor, extractEncrypted(encryptedBytes, iv));
+		
 	}
 
+	private byte[] extractIv(byte[] encrypted) {
+		return subArray(encrypted, 0, ivGenerator.getKeyLength());
+	}
+	
+	private byte[] extractEncrypted(byte[] encryptedBytes, byte[] iv) {
+		return subArray(encryptedBytes, iv.length, encryptedBytes.length);
+	}
 }
