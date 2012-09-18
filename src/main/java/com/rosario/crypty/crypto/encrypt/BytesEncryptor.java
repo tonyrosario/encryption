@@ -9,11 +9,11 @@ public interface BytesEncryptor {
 	/**
 	 * Encrypts the byte array.
 	 */
-	byte[] encrypt(byte[] byteArray);
+	byte[] encrypt(byte[] bytes);
 	
 	/**
 	 * Decrypts the byte array.
 	 */
-	byte[] decrypt(byte[] encryptedByteArray);
+	byte[] decrypt(byte[] encryptedBytes);
 	
 }
