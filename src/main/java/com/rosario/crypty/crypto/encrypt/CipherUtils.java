@@ -1,13 +1,11 @@
 package com.rosario.crypty.crypto.encrypt;
 
 import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
 
 /**
  * Static helper for working with Cipher API.
