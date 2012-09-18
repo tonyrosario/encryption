@@ -18,6 +18,7 @@ import javax.crypto.SecretKey;
  * Note: this should also help with reducing exception handling code in our
  * encryption API.
  * 
+ * @author Keith Donalod
  * @author trosario
  * 
  */
