@@ -1,8 +1,13 @@
 package com.rosario.crypty.crypto.encrypt;
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.AlgorithmParameterSpec;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
@@ -46,4 +51,57 @@ public class CipherUtils {
 		}
 	}
 
+	/**
+	 * Combine the individual byte arrays into one array.
+	 */
+	public static byte[] concatenate(byte[]... arrays) {
+		int length = 0;
+		for (byte[] array : arrays) {
+			length += array.length;
+		}
+		byte[] newArray = new byte[length];
+		int destPos = 0;
+		for (byte[] array : arrays) {
+			System.arraycopy(array, 0, newArray, destPos, array.length);
+			destPos += array.length;
+		}
+		return newArray;
+	}
+	
+	/**
+	 * Initializes the cipher for use.
+	 * 
+	 * For AES CBC encryption, ALWAYS use an IvParameterSpec (AlgorithmParameterSpec)
+	 * so that the first block, 16 bytes, are randomized.
+	 * 
+	 * @param cipher
+	 * @param mode
+	 * @param secretKey
+	 * @param parameterSpec
+	 */
+	public static void initCipher(Cipher cipher, int mode, SecretKey secretKey, AlgorithmParameterSpec parameterSpec) {
+		try {
+			if (parameterSpec != null) {
+				cipher.init(mode, secretKey, parameterSpec);
+			} else {
+				cipher.init(mode, secretKey);
+			}
+		} catch (InvalidKeyException e) {
+			throw new IllegalArgumentException("Unable to initialize due to invalid secret key", e);
+		} catch (InvalidAlgorithmParameterException e) {
+			throw new IllegalArgumentException("Unable to initialize due to invalid decryption parameter spec", e);
+		}
+		
+	}
+	
+	public static byte[] doFinal(Cipher cipher, byte[] input) {
+		try {
+			return cipher.doFinal(input);
+		} catch (IllegalBlockSizeException e) {
+			throw new IllegalStateException("Unable to invoke Cipher due to illegal block size", e);
+		} catch (BadPaddingException e) {
+			throw new IllegalStateException("Unable to invoke Cipher due to bad padding", e);
+		} 
+		
+	}
 }
