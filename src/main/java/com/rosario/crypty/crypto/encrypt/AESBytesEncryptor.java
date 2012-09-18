@@ -41,17 +41,21 @@ public class AESBytesEncryptor implements BytesEncryptor {
 	}
 
 	public byte[] encrypt(byte[] bytes) {
-		byte[] iv = ivGenerator.generateKey();
-		IvParameterSpec ivspec = new IvParameterSpec(iv);
-		initCipher(encryptor, Cipher.ENCRYPT_MODE, secretKey, ivspec);
-		byte[] encrypted = doFinal(encryptor, bytes);
-		return concatenate(iv, encrypted);
+		synchronized (encryptor) {
+			byte[] iv = ivGenerator.generateKey();
+			IvParameterSpec ivspec = new IvParameterSpec(iv);
+			initCipher(encryptor, Cipher.ENCRYPT_MODE, secretKey, ivspec);
+			byte[] encrypted = doFinal(encryptor, bytes);
+			return concatenate(iv, encrypted);
+		}
 	}
 
 	public byte[] decrypt(byte[] encryptedBytes) {
-		byte[] iv = extractIv(encryptedBytes);
-		initCipher(decryptor, Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(iv));
-		return doFinal(decryptor, extractEncrypted(encryptedBytes, iv));
+		synchronized (decryptor) {
+			byte[] iv = extractIv(encryptedBytes);
+			initCipher(decryptor, Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(iv));
+			return doFinal(decryptor, extractEncrypted(encryptedBytes, iv));
+		}
 	}
 
 	private byte[] extractIv(byte[] encrypted) {
